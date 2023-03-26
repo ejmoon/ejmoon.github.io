@@ -14,106 +14,104 @@ function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _ty
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { AudioPlayer } from '../src';
+import { View } from 'react-native';
+import Matter, { Engine, Events } from 'matter-js';
 import { jsx as _jsx } from "react/jsx-runtime";
-import { jsxs as _jsxs } from "react/jsx-runtime";
-var Intro = /*#__PURE__*/function (_Component) {
-  _inherits(Intro, _Component);
-  var _super = _createSuper(Intro);
-  function Intro(props) {
+var World = /*#__PURE__*/function (_Component) {
+  _inherits(World, _Component);
+  var _super = _createSuper(World);
+  function World(props) {
     var _this;
-    _classCallCheck(this, Intro);
+    _classCallCheck(this, World);
     _this = _super.call(this, props);
-    _defineProperty(_assertThisInitialized(_this), "handleButtonClick", function () {
-      _this.startNoise.play();
-      _this.props.onStart();
+    _this.loopID = null;
+    _this.lastTime = null;
+    var world = Matter.World.create({
+      gravity: props.gravity
     });
-    _this.state = {
-      blink: false,
-      isMobile: false // 모바일 기기인지 체크할 변수
-    };
-
-    _this.startUpdate = _this.startUpdate.bind(_assertThisInitialized(_this));
-    _this.handleKeyPress = _this.handleKeyPress.bind(_assertThisInitialized(_this));
+    _this.engine = Engine.create({
+      world: world
+    });
+    _this.loop = _this.loop.bind(_assertThisInitialized(_this));
     return _this;
   }
-  _createClass(Intro, [{
+  _createClass(World, [{
+    key: "componentWillReceiveProps",
+    value: function componentWillReceiveProps(nextProps) {
+      var gravity = nextProps.gravity;
+      if (gravity !== this.props.gravity) {
+        this.engine.world.gravity = gravity;
+      }
+    }
+  }, {
     key: "componentDidMount",
     value: function componentDidMount() {
-      var _this2 = this;
-      this.startNoise = new AudioPlayer('/assets/start.wav');
-      window.addEventListener('keypress', this.handleKeyPress);
-      this.animationFrame = requestAnimationFrame(this.startUpdate);
-      this.interval = setInterval(function () {
-        _this2.setState({
-          blink: !_this2.state.blink
-        });
-      }, 500);
-
-      // user agent string에서 모바일 기기 정보가 있는지 확인
-      var userAgent = navigator.userAgent.toLowerCase();
-      var isMobile = userAgent.includes('mobi') || userAgent.includes('android');
-      this.setState({
-        isMobile: isMobile
-      });
+      this.loopID = this.context.loop.subscribe(this.loop);
+      this.props.onInit(this.engine);
+      Events.on(this.engine, 'afterUpdate', this.props.onUpdate);
+      Events.on(this.engine, 'collisionStart', this.props.onCollision);
     }
   }, {
     key: "componentWillUnmount",
     value: function componentWillUnmount() {
-      window.removeEventListener('keypress', this.handleKeyPress);
-      cancelAnimationFrame(this.animationFrame);
-      clearInterval(this.interval);
+      this.context.loop.unsubscribe(this.loopID);
+      Events.off(this.engine, 'afterUpdate', this.props.onUpdate);
+      Events.off(this.engine, 'collisionStart', this.props.onCollision);
+    }
+  }, {
+    key: "getChildContext",
+    value: function getChildContext() {
+      return {
+        engine: this.engine
+      };
     }
   }, {
     key: "render",
     value: function render() {
-      return /*#__PURE__*/_jsxs("div", {
-        style: {
-          marginTop: '100px',
-          marginBottom: '100px',
-          position: 'relative'
-        },
-        children: [/*#__PURE__*/_jsx("p", {
-          className: "t1",
-          children: "WDDING STORY"
-        }), /*#__PURE__*/_jsx("p", {
-          className: "t2",
-          children: "GAME START"
-        }), /*#__PURE__*/_jsx("img", {
-          className: "intro",
-          src: "assets/main.png",
-          width: "300",
-          height: "550"
-        }), this.state.isMobile ? /*#__PURE__*/_jsx("button", {
-          className: "t3",
-          onClick: this.handleButtonClick,
-          children: "Press \"Enter\""
-        }) : /*#__PURE__*/_jsx("p", {
-          className: "t3",
-          style: {
-            display: this.state.blink ? 'block' : 'none'
-          },
-          children: "Press \"Enter\""
-        })]
+      var defaultStyles = {
+        flex: 1
+      };
+      return /*#__PURE__*/_jsx(View, {
+        style: defaultStyles,
+        children: this.props.children
       });
     }
   }, {
-    key: "startUpdate",
-    value: function startUpdate() {
-      this.animationFrame = requestAnimationFrame(this.startUpdate);
-    }
-  }, {
-    key: "handleKeyPress",
-    value: function handleKeyPress(e) {
-      if (e.keyCode === 13) {
-        this.startNoise.play();
-        this.props.onStart();
-      }
+    key: "loop",
+    value: function loop() {
+      var currTime = 0.001 * Date.now();
+      Engine.update(this.engine, 1000 / 60, this.lastTime ? currTime / this.lastTime : 1);
+      this.lastTime = currTime;
     }
   }]);
-  return Intro;
+  return World;
 }(Component);
-_defineProperty(Intro, "propTypes", {
-  onStart: PropTypes.func
+_defineProperty(World, "propTypes", {
+  children: PropTypes.any,
+  gravity: PropTypes.shape({
+    x: PropTypes.number,
+    y: PropTypes.number,
+    scale: PropTypes.number
+  }),
+  onCollision: PropTypes.func,
+  onInit: PropTypes.func,
+  onUpdate: PropTypes.func
 });
-export { Intro as default };
+_defineProperty(World, "defaultProps", {
+  gravity: {
+    x: 0,
+    y: 1,
+    scale: 0.001
+  },
+  onCollision: function onCollision() {},
+  onInit: function onInit() {},
+  onUpdate: function onUpdate() {}
+});
+_defineProperty(World, "contextTypes", {
+  scale: PropTypes.number,
+  loop: PropTypes.object
+});
+_defineProperty(World, "childContextTypes", {
+  engine: PropTypes.object
+});
+export { World as default };

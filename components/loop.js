@@ -1,4 +1,6 @@
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
@@ -14,106 +16,60 @@ function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _ty
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { AudioPlayer } from '../src';
+import GameLoop from '../utils/game-loop';
 import { jsx as _jsx } from "react/jsx-runtime";
-import { jsxs as _jsxs } from "react/jsx-runtime";
-var Intro = /*#__PURE__*/function (_Component) {
-  _inherits(Intro, _Component);
-  var _super = _createSuper(Intro);
-  function Intro(props) {
+var Loop = /*#__PURE__*/function (_Component) {
+  _inherits(Loop, _Component);
+  var _super = _createSuper(Loop);
+  function Loop(props) {
     var _this;
-    _classCallCheck(this, Intro);
+    _classCallCheck(this, Loop);
     _this = _super.call(this, props);
-    _defineProperty(_assertThisInitialized(_this), "handleButtonClick", function () {
-      _this.startNoise.play();
-      _this.props.onStart();
-    });
-    _this.state = {
-      blink: false,
-      isMobile: false // 모바일 기기인지 체크할 변수
-    };
-
-    _this.startUpdate = _this.startUpdate.bind(_assertThisInitialized(_this));
-    _this.handleKeyPress = _this.handleKeyPress.bind(_assertThisInitialized(_this));
+    _this.loop = new GameLoop();
     return _this;
   }
-  _createClass(Intro, [{
+  _createClass(Loop, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      var _this2 = this;
-      this.startNoise = new AudioPlayer('/assets/start.wav');
-      window.addEventListener('keypress', this.handleKeyPress);
-      this.animationFrame = requestAnimationFrame(this.startUpdate);
-      this.interval = setInterval(function () {
-        _this2.setState({
-          blink: !_this2.state.blink
-        });
-      }, 500);
-
-      // user agent string에서 모바일 기기 정보가 있는지 확인
-      var userAgent = navigator.userAgent.toLowerCase();
-      var isMobile = userAgent.includes('mobi') || userAgent.includes('android');
-      this.setState({
-        isMobile: isMobile
-      });
+      this.loop.start();
     }
   }, {
     key: "componentWillUnmount",
     value: function componentWillUnmount() {
-      window.removeEventListener('keypress', this.handleKeyPress);
-      cancelAnimationFrame(this.animationFrame);
-      clearInterval(this.interval);
+      this.loop.stop();
+    }
+  }, {
+    key: "getChildContext",
+    value: function getChildContext() {
+      return {
+        loop: this.loop
+      };
     }
   }, {
     key: "render",
     value: function render() {
-      return /*#__PURE__*/_jsxs("div", {
-        style: {
-          marginTop: '100px',
-          marginBottom: '100px',
-          position: 'relative'
-        },
-        children: [/*#__PURE__*/_jsx("p", {
-          className: "t1",
-          children: "WDDING STORY"
-        }), /*#__PURE__*/_jsx("p", {
-          className: "t2",
-          children: "GAME START"
-        }), /*#__PURE__*/_jsx("img", {
-          className: "intro",
-          src: "assets/main.png",
-          width: "300",
-          height: "550"
-        }), this.state.isMobile ? /*#__PURE__*/_jsx("button", {
-          className: "t3",
-          onClick: this.handleButtonClick,
-          children: "Press \"Enter\""
-        }) : /*#__PURE__*/_jsx("p", {
-          className: "t3",
-          style: {
-            display: this.state.blink ? 'block' : 'none'
-          },
-          children: "Press \"Enter\""
-        })]
+      var defaultStyles = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        height: '80%',
+        width: '80%'
+      };
+      var styles = _objectSpread(_objectSpread({}, defaultStyles), this.props.style);
+      return /*#__PURE__*/_jsx("div", {
+        style: styles,
+        children: this.props.children
       });
     }
-  }, {
-    key: "startUpdate",
-    value: function startUpdate() {
-      this.animationFrame = requestAnimationFrame(this.startUpdate);
-    }
-  }, {
-    key: "handleKeyPress",
-    value: function handleKeyPress(e) {
-      if (e.keyCode === 13) {
-        this.startNoise.play();
-        this.props.onStart();
-      }
-    }
   }]);
-  return Intro;
+  return Loop;
 }(Component);
-_defineProperty(Intro, "propTypes", {
-  onStart: PropTypes.func
+_defineProperty(Loop, "propTypes", {
+  children: PropTypes.any,
+  style: PropTypes.object
 });
-export { Intro as default };
+_defineProperty(Loop, "childContextTypes", {
+  loop: PropTypes.object
+});
+export { Loop as default };

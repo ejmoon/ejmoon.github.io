@@ -53,9 +53,17 @@ var Game = /*#__PURE__*/function (_Component) {
       });
       this.setState({
         fade: false,
-        doorText: '방향키(→ ←)로 이동하세요'
+        doorText: '방향키(→ ←)로 이동하세요',
+        isMobile: false
       });
       this.keyListener.subscribe([this.keyListener.LEFT, this.keyListener.RIGHT, this.keyListener.UP, this.keyListener.SPACE, 65]);
+
+      // user agent string에서 모바일 기기 정보가 있는지 확인
+      var userAgent = navigator.userAgent.toLowerCase();
+      var isMobile = userAgent.includes('mobi') || userAgent.includes('android');
+      this.setState({
+        isMobile: isMobile
+      });
     }
   }, {
     key: "componentWillUnmount",

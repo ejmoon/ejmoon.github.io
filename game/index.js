@@ -100,7 +100,15 @@ var Game = /*#__PURE__*/function (_Component) {
             justifyContent: 'center'
           },
           children: this.state.doorText
-        })]
+        }), this.state.isMobile ? /*#__PURE__*/_jsxs(_Fragment, {
+          children: [/*#__PURE__*/_jsx("button", {
+            onClick: this.handleButtonClick,
+            children: "\u2192"
+          }), /*#__PURE__*/_jsx("button", {
+            onClick: this.handleButtonClick,
+            children: "\u2190"
+          })]
+        }) : null]
       });
     }
   }, {

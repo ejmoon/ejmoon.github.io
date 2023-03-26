@@ -87,7 +87,7 @@ var Intro = /*#__PURE__*/function (_Component) {
         }), this.state.isMobile ? /*#__PURE__*/_jsx("button", {
           className: "t3",
           onClick: this.handleButtonClick,
-          children: "Press \"Enter\""
+          children: "Press"
         }) : /*#__PURE__*/_jsx("p", {
           className: "t3",
           style: {

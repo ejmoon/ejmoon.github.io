@@ -5,7 +5,7 @@ import { jsx as _jsx } from "react/jsx-runtime";
 export default {
   slides: [/*#__PURE__*/_jsx(Slide, {
     children: /*#__PURE__*/_jsx("h2", {
-      children: "\uC6B0\uB9AC\uB294 \uC5F0\uC218\uD504\uB85C\uADF8\uB7A8\uC5D0\uC11C \uB9CC\uB0AC\uC5B4\uC694"
+      children: "\uC2B9\uD604\uC774\uC640 \uC9C0\uC778\uC774\uB294 \uD574\uC678 \uC5F0\uC218\uD504\uB85C\uADF8\uB7A8\uC5D0\uC11C \uB9CC\uB0AC\uC5B4\uC694"
     })
   }), /*#__PURE__*/_jsx(Slide, {
     children: /*#__PURE__*/_jsx("h2", {
@@ -21,13 +21,11 @@ export default {
     })
   }), /*#__PURE__*/_jsx(Slide, {
     children: /*#__PURE__*/_jsx("img", {
-      src: "assets/a2.png",
-      alt: "My Image"
-    })
-  }), /*#__PURE__*/_jsx(Slide, {
-    children: /*#__PURE__*/_jsx("img", {
-      src: "assets/a3.png",
-      alt: "My Image"
+      src: "assets/img/a1.png",
+      alt: "My Image",
+      style: {
+        maxWidth: '100%'
+      }
     })
   }), /*#__PURE__*/_jsx(Slide, {
     children: /*#__PURE__*/_jsx("h2", {

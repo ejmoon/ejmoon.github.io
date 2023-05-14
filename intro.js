@@ -74,13 +74,13 @@ var Intro = /*#__PURE__*/function (_Component) {
           position: 'relative'
         },
         children: [/*#__PURE__*/_jsx("p", {
-          className: "t1",
+          className: "t1 shadow-text",
           children: "WDDING STORY"
         }), /*#__PURE__*/_jsx("p", {
-          className: "t2",
+          className: "t2 shadow-text",
           children: "GAME START"
         }), /*#__PURE__*/_jsx("img", {
-          className: "intro",
+          className: "intro shadow-img",
           src: "assets/main.png",
           width: "300",
           height: "550"
@@ -89,11 +89,16 @@ var Intro = /*#__PURE__*/function (_Component) {
           onClick: this.handleButtonClick,
           children: "Press"
         }) : /*#__PURE__*/_jsx("p", {
-          className: "t3",
-          style: {
-            display: this.state.blink ? 'block' : 'none'
-          },
-          children: "Press \"Enter\""
+          className: "t3"
+          // style={{ display: this.state.blink ? 'block' : 'none'}}
+          ,
+          children: /*#__PURE__*/_jsx("button", {
+            className: "start-button",
+            style: {
+              marginBottom: '30px'
+            },
+            children: "Play"
+          })
         })]
       });
     }

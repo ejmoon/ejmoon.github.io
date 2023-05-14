@@ -21,7 +21,8 @@ var Slide = function Slide(props) {
           width: '100%',
           display: 'flex',
           justifyContent: "center",
-          alignItems: 'center'
+          alignItems: 'center',
+          fontFamily: 'omu'
         },
         children: props.children
       })

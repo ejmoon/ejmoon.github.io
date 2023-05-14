@@ -22,7 +22,7 @@ var Slide = function Slide(props) {
           display: 'flex',
           justifyContent: "center",
           alignItems: 'center',
-          fontFamily: 'omu'
+          fontFamily: 'teaback'
         },
         children: props.children
       })

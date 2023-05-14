@@ -2,10 +2,20 @@
 import React from 'react';
 import Slide from './slide';
 import { jsx as _jsx } from "react/jsx-runtime";
+import { jsxs as _jsxs } from "react/jsx-runtime";
 export default {
   slides: [/*#__PURE__*/_jsx(Slide, {
-    children: /*#__PURE__*/_jsx("h3", {
-      children: "\uB458\uC740 \uB2E4\uC2DC \uD55C\uAD6D\uC5D0 \uB3CC\uC544\uC640 \uC790\uB9AC\uC7A1\uAE30\uB85C \uACB0\uC815\uD588\uC5B4\uC694. \uC778\uB3C4\uB124\uC2DC\uC544\uC5D0\uC11C\uC758 \uB9C8\uC9C0\uB9C9 \uCD94\uC5B5\uC744 \uC313\uAE30\uC704\uD574 \uBC1C\uB9AC \uD55C\uB2EC \uC0B4\uAE30\uB97C \uD588\uC5B4\uC694"
+    children: /*#__PURE__*/_jsxs("div", {
+      style: {
+        display: 'block !important'
+      },
+      children: [/*#__PURE__*/_jsx("h3", {
+        children: "\uB458\uC740 \uB2E4\uC2DC \uD55C\uAD6D\uC5D0 \uB3CC\uC544\uC640 \uC790\uB9AC\uC7A1\uAE30\uB85C \uACB0\uC815\uD588\uC5B4\uC694. "
+      }), /*#__PURE__*/_jsx("h3", {
+        children: "\uC778\uB3C4\uB124\uC2DC\uC544\uC5D0\uC11C\uC758 \uB9C8\uC9C0\uB9C9 \uCD94\uC5B5\uC744 \uC313\uAE30\uC704\uD574"
+      }), /*#__PURE__*/_jsx("h3", {
+        children: "\uBC1C\uB9AC \uD55C\uB2EC \uC0B4\uAE30\uB97C \uD588\uC5B4\uC694"
+      })]
     })
   }), /*#__PURE__*/_jsx(Slide, {
     children: /*#__PURE__*/_jsx("h3", {

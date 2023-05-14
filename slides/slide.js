@@ -23,6 +23,7 @@ var Slide = function Slide(props) {
           justifyContent: "center",
           alignItems: 'center',
           fontFamily: 'teaback'
+          // , textAlign: 'center'
         },
         children: props.children
       })
